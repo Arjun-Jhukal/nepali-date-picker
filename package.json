@@ -1,0 +1,28 @@
+{
+    "name": "@nepali-date/picker",
+    "version": "0.1.0",
+    "description": "Vanilla JS Bikram Sambat (BS) date picker. Zero runtime dependencies.",
+    "main": "dist/nepali-date-picker.umd.js",
+    "module": "dist/nepali-date-picker.esm.js",
+    "types": "dist/types/index.d.ts",
+    "files": ["dist"],
+    "scripts": {
+        "build": "node scripts/build.mjs",
+        "test": "vitest run",
+        "test:watch": "vitest",
+        "coverage": "vitest run --coverage",
+        "typecheck": "tsc --noEmit",
+        "validate-data": "node scripts/validate-data.mjs",
+        "size": "node scripts/build.mjs --size-check"
+    },
+    "devDependencies": {
+        "typescript": "^5.4.0",
+        "esbuild": "^0.20.2",
+        "vitest": "^1.4.0",
+        "jsdom": "^24.0.0",
+        "@vitest/coverage-v8": "^1.4.0",
+        "@types/node": "^20.0.0"
+    },
+    "keywords": ["nepali", "date", "picker", "bikram", "sambat", "BS", "calendar"],
+    "license": "MIT"
+}
