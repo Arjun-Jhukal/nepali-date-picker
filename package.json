@@ -1,6 +1,6 @@
 {
-    "name": "nepali-date-picker",
-    "version": "1.0.0",
+    "name": "nepali-bs-date-picker",
+    "version": "2.1.0",
     "description": "Vanilla JS Bikram Sambat (BS) date picker. Zero runtime dependencies.",
     "main": "dist/nepali-date-picker.umd.js",
     "module": "dist/nepali-date-picker.esm.js",
