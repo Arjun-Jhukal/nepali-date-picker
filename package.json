@@ -1,11 +1,26 @@
 {
-    "name": "@nepali-date/picker",
-    "version": "0.1.0",
+    "name": "nepali-date-picker",
+    "version": "1.0.0",
     "description": "Vanilla JS Bikram Sambat (BS) date picker. Zero runtime dependencies.",
     "main": "dist/nepali-date-picker.umd.js",
     "module": "dist/nepali-date-picker.esm.js",
     "types": "dist/types/index.d.ts",
-    "files": ["dist"],
+    "exports": {
+        ".": {
+            "import": "./dist/nepali-date-picker.esm.js",
+            "require": "./dist/nepali-date-picker.umd.js",
+            "types": "./dist/types/index.d.ts"
+        },
+        "./css": "./dist/nepali-date-picker.min.css",
+        "./dark": "./dist/nepali-date-picker.dark.min.css"
+    },
+    "sideEffects": [
+        "./dist/*.css",
+        "./src/picker/auto-init.ts"
+    ],
+    "files": [
+        "dist"
+    ],
     "scripts": {
         "build": "node scripts/build.mjs",
         "test": "vitest run",
@@ -13,7 +28,7 @@
         "coverage": "vitest run --coverage",
         "typecheck": "tsc --noEmit",
         "validate-data": "node scripts/validate-data.mjs",
-        "size": "node scripts/build.mjs --size-check"
+        "prepublishOnly": "npm run build && npm test && npm run typecheck"
     },
     "devDependencies": {
         "typescript": "^5.4.0",
@@ -23,6 +38,25 @@
         "@vitest/coverage-v8": "^1.4.0",
         "@types/node": "^20.0.0"
     },
-    "keywords": ["nepali", "date", "picker", "bikram", "sambat", "BS", "calendar"],
-    "license": "MIT"
+    "keywords": [
+        "nepali",
+        "date",
+        "picker",
+        "bikram",
+        "sambat",
+        "BS",
+        "calendar",
+        "datepicker",
+        "nepali-calendar"
+    ],
+    "author": "Arjun Jhukal",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/Arjun-Jhukal/nepali-date-picker"
+    },
+    "homepage": "https://github.com/Arjun-Jhukal/nepali-date-picker",
+    "bugs": {
+        "url": "https://github.com/Arjun-Jhukal/nepali-date-picker/issues"
+    }
 }

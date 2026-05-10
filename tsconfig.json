@@ -13,7 +13,7 @@
         "noFallthroughCasesInSwitch": true,
         "outDir": "dist/types",
         "declaration": true,
-        "declarationOnly": true,
+        "emitDeclarationOnly": true,
         "skipLibCheck": true,
         "resolveJsonModule": true,
         "esModuleInterop": true

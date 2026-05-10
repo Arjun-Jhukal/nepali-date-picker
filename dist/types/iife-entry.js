@@ -9,6 +9,5 @@
  */
 import { NepaliDatePicker } from './picker/index';
 import './picker/auto-init';
-
-(window as unknown as { NepaliDatePicker: typeof NepaliDatePicker }).NepaliDatePicker =
+window.NepaliDatePicker =
     NepaliDatePicker;

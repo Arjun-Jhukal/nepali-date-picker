@@ -14,6 +14,7 @@ import { build } from 'esbuild';
 import { readFileSync, writeFileSync, mkdirSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
+import { execSync } from 'child_process';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, '..');
@@ -79,12 +80,19 @@ writeFileSync(
     banner + minifyCss(darkCss),
 );
 
+// ---------------------------------------------------------------------------
+// TypeScript declarations
+// ---------------------------------------------------------------------------
+
+execSync('node node_modules/typescript/bin/tsc', { stdio: 'inherit' });
+
 console.log('✓ Build complete. dist/ files:');
 console.log('  nepali-date-picker.iife.min.js');
 console.log('  nepali-date-picker.esm.js');
 console.log('  nepali-date-picker.umd.js');
 console.log('  nepali-date-picker.min.css');
 console.log('  nepali-date-picker.dark.min.css');
+console.log('  types/index.d.ts  (+ all declarations)');
 
 // ---------------------------------------------------------------------------
 // Helpers

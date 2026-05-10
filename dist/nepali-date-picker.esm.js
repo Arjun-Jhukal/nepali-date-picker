@@ -679,75 +679,6 @@ function resolveOptions(partial) {
   }
   return opts;
 }
-function parseDataAttributes(el) {
-  const opts = {};
-  const dataset = el.dataset;
-  if (dataset["mode"]) {
-    opts.mode = dataset["mode"];
-  }
-  if (dataset["format"]) {
-    opts.format = dataset["format"];
-  }
-  if (dataset["language"]) {
-    opts.language = dataset["language"];
-  }
-  if (dataset["useNepaliNumerals"]) {
-    opts.useNepaliNumerals = dataset["useNepaliNumerals"] !== "false";
-  }
-  if (dataset["weekendDays"]) {
-    try {
-      opts.weekendDays = dataset["weekendDays"].split(",").map((s) => parseInt(s.trim(), 10));
-    } catch {
-      console.warn("[NepaliDatePicker] Invalid data-weekend-days, ignoring");
-    }
-  }
-  if (dataset["minDate"]) {
-    try {
-      opts.minDate = NepaliDate.parse(dataset["minDate"], "YYYY-MM-DD");
-    } catch {
-      console.warn(
-        `[NepaliDatePicker] Invalid data-min-date="${dataset["minDate"]}", ignoring`
-      );
-    }
-  }
-  if (dataset["maxDate"]) {
-    try {
-      opts.maxDate = NepaliDate.parse(dataset["maxDate"], "YYYY-MM-DD");
-    } catch {
-      console.warn(
-        `[NepaliDatePicker] Invalid data-max-date="${dataset["maxDate"]}", ignoring`
-      );
-    }
-  }
-  if (dataset["disabledDates"]) {
-    opts.disabledDates = dataset["disabledDates"].split(",").flatMap((s) => {
-      try {
-        return [NepaliDate.parse(s.trim(), "YYYY-MM-DD")];
-      } catch {
-        console.warn(
-          `[NepaliDatePicker] Cannot parse disabled date '${s}', ignoring`
-        );
-        return [];
-      }
-    });
-  }
-  if (dataset["closeOnSelect"]) {
-    opts.closeOnSelect = dataset["closeOnSelect"] !== "false";
-  }
-  if (dataset["theme"]) {
-    opts.theme = dataset["theme"];
-  }
-  if (dataset["position"]) {
-    opts.position = dataset["position"];
-  }
-  if (dataset["zIndex"]) {
-    opts.zIndex = parseInt(dataset["zIndex"], 10);
-  }
-  if (dataset["firstDayOfWeek"]) {
-    opts.firstDayOfWeek = parseInt(dataset["firstDayOfWeek"], 10);
-  }
-  return opts;
-}
 
 // src/picker/grid.ts
 function renderGrid(viewYear, viewMonth, selected, today, opts) {
@@ -1538,7 +1469,7 @@ var NepaliDatePicker = {
     }
     if (target instanceof NodeList || Array.isArray(target)) {
       const results = [];
-      target.forEach((el) => {
+      Array.from(target).forEach((el) => {
         results.push(getOrCreate(el, opts));
       });
       return results;
@@ -1589,25 +1520,6 @@ function getOrCreate(el, opts) {
   const picker = new Picker(el, opts);
   InstanceRegistry.set(el, picker);
   return picker;
-}
-
-// src/picker/auto-init.ts
-function autoInit() {
-  const scripts = document.querySelectorAll(
-    "script[data-nepali-no-autoinit]"
-  );
-  if (scripts.length > 0)
-    return;
-  const elements = document.querySelectorAll("[data-nepali-datepicker]");
-  elements.forEach((el) => {
-    const dataOpts = parseDataAttributes(el);
-    NepaliDatePicker.attach(el, dataOpts);
-  });
-}
-if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", autoInit);
-} else {
-  autoInit();
 }
 export {
   NepaliDate,
