@@ -8,4 +8,6 @@
 export { bsToAd, adToBs, getDaysInMonth, isValidBSDate } from './core/conversion';
 export { NepaliDate } from './core/nepali-date';
 export { NepaliDatePicker, Picker } from './picker/index';
+export { InlineCalendar } from './picker/inline';
 export type { PickerOptions, PickerTheme, PickerLanguage, PickerPosition } from './picker/options';
+export type { InlineCalendarOptions } from './picker/inline';

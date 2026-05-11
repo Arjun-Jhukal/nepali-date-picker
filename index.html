@@ -3,592 +3,299 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>nepali-bs-date-picker</title>
+
+    <!-- Primary SEO -->
+    <title>Nepali Date Picker 2026 · Bikram Sambat & Range Picker for Web</title>
+    <meta name="description" content="Free Nepali date picker and Nepali date range picker for any website. Vanilla JS, zero dependencies, BS ↔ AD conversion, 2082–2100 calendar data, ~11 KB gzipped. Drop-in script tag, npm, WordPress.">
+    <meta name="keywords" content="nepali date picker, nepali date range picker, nepali date picker 2026, bikram sambat date picker, BS date picker, nepali calendar picker, nepali date converter, BS to AD, AD to BS, nepali datepicker javascript, vanilla js nepali calendar">
+    <meta name="author" content="Arjun Jhukal">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+    <meta name="theme-color" content="#3b82f6">
+    <link rel="canonical" href="https://arjun-jhukal.github.io/nepali-date-picker/">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Nepali Date Picker">
+    <meta property="og:title" content="Nepali Date Picker 2026 · Bikram Sambat & Range Picker">
+    <meta property="og:description" content="Vanilla JS Nepali date picker and range picker. Zero dependencies, BS ↔ AD conversion, 2082–2100 calendar data, drop-in <script> tag.">
+    <meta property="og:url" content="https://arjun-jhukal.github.io/nepali-date-picker/">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:locale:alternate" content="ne_NP">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Nepali Date Picker 2026 · Bikram Sambat & Range Picker">
+    <meta name="twitter:description" content="Vanilla JS Nepali date picker and range picker. BS ↔ AD conversion, 2082–2100 calendar data, ~11 KB gzipped.">
+
+    <!-- Structured data (SoftwareApplication) for richer Google results -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "Nepali Date Picker",
+        "alternateName": ["Nepali Date Range Picker", "Bikram Sambat Date Picker", "BS Date Picker"],
+        "description": "Vanilla JS Nepali (Bikram Sambat) date picker and date range picker with BS to AD conversion. Zero dependencies, 2082-2100 calendar data, ~11 KB gzipped.",
+        "applicationCategory": "DeveloperApplication",
+        "applicationSubCategory": "JavaScript Library",
+        "operatingSystem": "Any (Browser, Node.js, WordPress)",
+        "softwareVersion": "2.2.0",
+        "url": "https://arjun-jhukal.github.io/nepali-date-picker/",
+        "downloadUrl": "https://github.com/Arjun-Jhukal/nepali-date-picker",
+        "codeRepository": "https://github.com/Arjun-Jhukal/nepali-date-picker",
+        "programmingLanguage": "TypeScript",
+        "license": "https://opensource.org/licenses/MIT",
+        "author": {
+            "@type": "Person",
+            "name": "Arjun Jhukal"
+        },
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        },
+        "keywords": "nepali date picker, nepali date range picker, nepali date picker 2026, bikram sambat date picker, BS date picker, nepali calendar"
+    }
+    </script>
+
     <link rel="stylesheet" href="dist/nepali-date-picker.min.css">
     <style>
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-        :root {
-            --text: #1a1a1a;
-            --text-muted: #555;
-            --border: #ddd;
-            --bg: #fff;
-            --bg-soft: #f6f6f6;
-            --accent: #c0392b;
-            --code-bg: #1e1e1e;
-        }
-
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            font-size: 15px;
-            line-height: 1.6;
-            color: var(--text);
-            background: var(--bg);
+            font-family: system-ui, -apple-system, sans-serif;
+            background: #f1f5f9;
+            min-height: 100vh;
+            padding: 40px 16px;
         }
+        .page { max-width: 720px; margin: 0 auto; }
+        h1 { font-size: 28px; font-weight: 700; color: #1e293b; margin-bottom: 6px; }
+        .subtitle { color: #64748b; margin-bottom: 40px; font-size: 15px; }
 
-        /* ── Nav ── */
-        nav {
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            background: var(--bg);
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 24px;
-            height: 52px;
+        .card {
+            background: #fff;
+            border-radius: 14px;
+            border: 1px solid #e2e8f0;
+            padding: 28px;
+            margin-bottom: 24px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.06);
         }
-        .nav-brand {
-            font-weight: 700;
-            font-size: 15px;
-            color: var(--text);
-            text-decoration: none;
-            letter-spacing: -0.02em;
+        .card h2 {
+            font-size: 16px; font-weight: 600; color: #334155;
+            margin-bottom: 16px; padding-bottom: 12px;
+            border-bottom: 1px solid #f1f5f9;
         }
-        .nav-brand span { color: var(--accent); }
-        .nav-links {
-            display: flex;
-            gap: 8px;
-            list-style: none;
+        label { display: block; font-size: 13px; font-weight: 500; color: #475569; margin-bottom: 6px; }
+        .field { margin-bottom: 20px; }
+        input[type="text"] {
+            width: 100%; padding: 10px 14px;
+            border: 1px solid #cbd5e1; border-radius: 8px;
+            font-size: 15px; color: #1e293b; background: #fff;
+            outline: none; transition: border-color 0.15s, box-shadow 0.15s;
         }
-        .nav-links a {
-            display: block;
-            padding: 6px 12px;
-            border-radius: 6px;
-            color: var(--text-muted);
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 500;
-            transition: background 0.12s, color 0.12s;
+        input[type="text"]:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59,130,246,0.15);
         }
-        .nav-links a:hover {
-            background: var(--bg-soft);
-            color: var(--text);
+        .result-box {
+            margin-top: 14px; padding: 12px 16px;
+            background: #f8fafc; border-radius: 8px;
+            font-size: 13px; color: #475569;
+            border: 1px solid #e2e8f0; min-height: 42px;
         }
-        .nav-links a.btn-npm {
-            background: var(--accent);
-            color: #fff;
-        }
-        .nav-links a.btn-npm:hover { background: #a93226; color: #fff; }
+        .result-box span { font-weight: 600; color: #1e293b; }
 
-        /* ── Hero ── */
-        .hero {
-            max-width: 680px;
-            margin: 0 auto;
-            padding: 72px 24px 56px;
+        .tag {
+            display: inline-block; background: #eff6ff; color: #1d4ed8;
+            font-size: 11px; font-weight: 600; padding: 2px 8px;
+            border-radius: 99px; margin-left: 8px; vertical-align: middle;
         }
-        .hero-eyebrow {
-            font-size: 12px;
-            font-weight: 600;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            color: var(--accent);
-            margin-bottom: 16px;
-        }
-        .hero h1 {
-            font-size: 36px;
-            font-weight: 800;
-            line-height: 1.15;
-            letter-spacing: -0.03em;
-            color: var(--text);
-            margin-bottom: 16px;
-        }
-        .hero p {
-            font-size: 17px;
-            color: var(--text-muted);
-            max-width: 520px;
-            margin-bottom: 32px;
-        }
-        .install-box {
-            display: inline-flex;
-            align-items: center;
-            gap: 12px;
-            background: var(--code-bg);
-            color: #d4d4d4;
-            font-family: 'Cascadia Code', 'Fira Code', Consolas, monospace;
-            font-size: 14px;
-            padding: 12px 16px;
-            border-radius: 8px;
-            margin-bottom: 12px;
-        }
-        .install-box code { color: #9cdcfe; }
-        .copy-install {
-            background: none;
-            border: 1px solid #444;
-            color: #888;
-            font-size: 11px;
-            font-weight: 600;
-            padding: 2px 8px;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: color 0.12s, border-color 0.12s;
-        }
-        .copy-install:hover { color: #d4d4d4; border-color: #888; }
-        .copy-install.copied { color: #6ec97a; border-color: #6ec97a; }
-        .hero-meta {
-            display: flex;
-            gap: 16px;
-            font-size: 13px;
-            color: var(--text-muted);
-            flex-wrap: wrap;
-        }
-        .hero-meta a { color: var(--text-muted); text-decoration: underline; }
-        .hero-meta a:hover { color: var(--text); }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        @media (max-width: 500px) { .grid-2 { grid-template-columns: 1fr; } }
 
-        /* ── Section base ── */
-        section { max-width: 680px; margin: 0 auto; padding: 0 24px 64px; }
-        section + section { border-top: 1px solid var(--border); padding-top: 56px; }
-        .section-label {
-            font-size: 11px;
-            font-weight: 700;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            color: var(--accent);
-            margin-bottom: 10px;
-        }
-        section h2 {
-            font-size: 24px;
-            font-weight: 700;
-            letter-spacing: -0.02em;
-            margin-bottom: 14px;
-        }
-        section p { color: var(--text-muted); margin-bottom: 20px; }
+        .dark-card { background: #1e293b; border-color: #334155; }
+        .dark-card h2, .dark-card label { color: #94a3b8; }
+        .dark-card input[type="text"] { background: #0f172a; border-color: #334155; color: #f1f5f9; }
+        .dark-card .result-box { background: #0f172a; border-color: #334155; color: #94a3b8; }
+        .dark-card .result-box span { color: #f1f5f9; }
 
-        /* ── Docs section ── */
-        .api-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 13.5px;
-            margin-bottom: 28px;
-        }
-        .api-table th {
-            text-align: left;
-            padding: 8px 12px;
-            background: var(--bg-soft);
-            border: 1px solid var(--border);
-            font-weight: 600;
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 0.04em;
-            color: var(--text-muted);
-        }
-        .api-table td {
-            padding: 9px 12px;
-            border: 1px solid var(--border);
-            vertical-align: top;
-        }
-        .api-table tr:hover td { background: var(--bg-soft); }
-        code {
-            font-family: 'Cascadia Code', 'Fira Code', Consolas, monospace;
-            font-size: 12.5px;
-            background: var(--bg-soft);
-            border: 1px solid var(--border);
-            padding: 1px 5px;
-            border-radius: 4px;
-        }
-        .api-table td code { background: none; border: none; padding: 0; color: #c0392b; }
+        .hint { font-size: 12px; color: #94a3b8; margin-top: 5px; }
 
-        .doc-block { margin-bottom: 36px; }
-        .doc-block h3 {
-            font-size: 16px;
-            font-weight: 700;
-            margin-bottom: 8px;
+        button.action-btn {
+            padding: 8px 16px; background: #3b82f6; color: #fff;
+            border: none; border-radius: 7px; font-size: 13px; font-weight: 600;
+            cursor: pointer; margin-right: 8px; margin-top: 6px;
         }
-        .doc-block p { margin-bottom: 10px; }
+        button.action-btn:hover { background: #2563eb; }
+        button.action-btn.secondary {
+            background: #f1f5f9; color: #334155; border: 1px solid #e2e8f0;
+        }
+        button.action-btn.secondary:hover { background: #e2e8f0; }
 
-        /* ── Code block ── */
+        /* Show code toggle */
+        .code-toggle { margin-top: 20px; }
+        .show-code-btn {
+            background: none; border: 1px solid #e2e8f0; border-radius: 7px;
+            color: #64748b; font-size: 12px; font-weight: 600;
+            padding: 5px 14px; cursor: pointer;
+            transition: border-color 0.15s, color 0.15s;
+        }
+        .show-code-btn:hover { border-color: #3b82f6; color: #3b82f6; }
+        .dark-card .show-code-btn { border-color: #334155; color: #64748b; }
+        .dark-card .show-code-btn:hover { border-color: #60a5fa; color: #60a5fa; }
+
         .code-block {
-            position: relative;
-            border-radius: 8px;
-            overflow: hidden;
-            margin: 16px 0;
+            margin-top: 12px; position: relative;
+            border-radius: 10px; overflow: hidden;
         }
         .code-block pre {
-            background: var(--code-bg);
-            color: #d4d4d4;
-            font-family: 'Cascadia Code', 'Fira Code', Consolas, monospace;
-            font-size: 13px;
-            line-height: 1.65;
-            padding: 20px;
-            overflow-x: auto;
+            background: #0f172a; color: #e2e8f0;
+            font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+            font-size: 12.5px; line-height: 1.7;
+            padding: 18px 20px 18px 20px;
+            overflow-x: auto; white-space: pre;
             margin: 0;
         }
-        .code-block .copy-btn {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: #2a2a2a;
-            border: 1px solid #444;
-            color: #888;
-            font-size: 11px;
-            font-weight: 600;
-            padding: 3px 9px;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: color 0.12s, border-color 0.12s;
+        .copy-btn {
+            position: absolute; top: 10px; right: 10px;
+            background: #1e293b; border: 1px solid #334155;
+            color: #94a3b8; font-size: 11px; font-weight: 600;
+            padding: 3px 10px; border-radius: 5px; cursor: pointer;
+            transition: background 0.15s, color 0.15s;
         }
-        .code-block .copy-btn:hover { color: #d4d4d4; border-color: #888; }
-        .code-block .copy-btn.copied { color: #6ec97a; border-color: #6ec97a; }
-
-        /* ── Examples section ── */
-        .example-item {
-            margin-bottom: 48px;
-        }
-        .example-item h3 {
-            font-size: 16px;
-            font-weight: 700;
-            margin-bottom: 6px;
-        }
-        .example-item p.note {
-            font-size: 13px;
-            color: var(--text-muted);
-            margin-bottom: 14px;
-        }
-
-        .demo-box {
-            background: var(--bg-soft);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 12px;
-        }
-        label.field-label {
-            display: block;
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--text-muted);
-            margin-bottom: 6px;
-        }
-        input[type="text"] {
-            width: 100%;
-            max-width: 280px;
-            padding: 8px 12px;
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            font-size: 14px;
-            color: var(--text);
-            background: var(--bg);
-            outline: none;
-            transition: border-color 0.12s;
-        }
-        input[type="text"]:focus { border-color: #888; }
-        .result {
-            margin-top: 10px;
-            font-size: 13px;
-            color: var(--text-muted);
-            min-height: 20px;
-        }
-        .result b { color: var(--text); font-weight: 600; }
-
-        .show-code-btn {
-            background: none;
-            border: 1px solid var(--border);
-            color: var(--text-muted);
-            font-size: 12px;
-            font-weight: 600;
-            padding: 4px 12px;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: border-color 0.12s, color 0.12s;
-        }
-        .show-code-btn:hover { border-color: #888; color: var(--text); }
-
-        .grid-2 {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 14px;
-        }
-        @media (max-width: 480px) { .grid-2 { grid-template-columns: 1fr; } }
-
-        .action-btn {
-            padding: 7px 14px;
-            background: var(--text);
-            color: var(--bg);
-            border: none;
-            border-radius: 6px;
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            margin-right: 6px;
-            margin-top: 8px;
-            transition: opacity 0.12s;
-        }
-        .action-btn:hover { opacity: 0.8; }
-        .action-btn.ghost {
-            background: none;
-            color: var(--text-muted);
-            border: 1px solid var(--border);
-        }
-        .action-btn.ghost:hover { border-color: #888; color: var(--text); opacity: 1; }
-
-        .dark-demo {
-            background: #141414;
-            border-color: #333;
-        }
-        .dark-demo label.field-label { color: #888; }
-        .dark-demo input[type="text"] { background: #0d0d0d; border-color: #333; color: #e8e8e8; }
-        .dark-demo .result { color: #888; }
-        .dark-demo .result b { color: #e8e8e8; }
-
-        /* ── Footer ── */
-        footer {
-            border-top: 1px solid var(--border);
-            text-align: center;
-            padding: 32px 24px;
-            font-size: 13px;
-            color: var(--text-muted);
-        }
-        footer a { color: var(--text-muted); }
-        footer a:hover { color: var(--text); }
+        .copy-btn:hover { background: #334155; color: #f1f5f9; }
+        .copy-btn.copied { color: #4ade80; border-color: #4ade80; }
     </style>
 </head>
 <body>
+<div class="page">
+    <h1>Nepali Date Picker &amp; Range Picker 2026</h1>
+    <p class="subtitle">A vanilla JavaScript <strong>Nepali (Bikram Sambat) date picker</strong> and <strong>Nepali date range picker</strong>. Zero dependencies · BS ↔ AD conversion · 2082–2100 calendar data · ~11 KB gzipped · Works in plain HTML, WordPress and any framework.</p>
 
-<!-- ── Navigation ── -->
-<nav>
-    <a class="nav-brand" href="#">nepali<span>-bs-</span>date-picker</a>
-    <ul class="nav-links">
-        <li><a href="#docs">Docs</a></li>
-        <li><a href="#examples">Examples</a></li>
-        <li><a href="https://github.com/Arjun-Jhukal/nepali-date-picker" target="_blank">GitHub</a></li>
-        <li><a href="https://www.npmjs.com/package/nepali-bs-date-picker" target="_blank" class="btn-npm">npm</a></li>
-    </ul>
-</nav>
-
-<!-- ── Hero ── -->
-<div class="hero">
-    <p class="hero-eyebrow">Bikram Sambat Date Picker</p>
-    <h1>The accurate Nepali date picker.</h1>
-    <p>Vanilla JS, zero runtime dependencies. BS ↔ AD conversion backed by official GoN calendar data — not algorithmic guesswork.</p>
-
-    <div class="install-box">
-        <code>npm install nepali-bs-date-picker</code>
-        <button class="copy-install" onclick="copyInstall(this)">copy</button>
-    </div>
-    <br>
-    <div class="hero-meta">
-        <span>~8 KB gzipped</span>
-        <span>BS 2082–2090</span>
-        <span>EN + नेपाली</span>
-        <a href="https://github.com/Arjun-Jhukal/nepali-date-picker/blob/main/LICENSE" target="_blank">MIT</a>
-    </div>
-</div>
-
-<!-- ── Docs ── -->
-<section id="docs">
-    <p class="section-label">Documentation</p>
-    <h2>Getting started</h2>
-    <p>Add the CSS, load the script, and attach a picker to any input element.</p>
-
-    <div class="doc-block">
-        <h3>Via CDN (quickest)</h3>
-        <div class="code-block">
-            <button class="copy-btn" onclick="copyCode(this)">copy</button>
-            <pre>&lt;link rel="stylesheet" href="https://unpkg.com/nepali-bs-date-picker/dist/nepali-date-picker.min.css"&gt;
-&lt;script src="https://unpkg.com/nepali-bs-date-picker/dist/nepali-date-picker.iife.min.js"&gt;&lt;/script&gt;
-
-&lt;input type="text" id="dob" placeholder="YYYY-MM-DD"&gt;
-&lt;script&gt;
-  NepaliDatePicker.attach('#dob');
-&lt;/script&gt;</pre>
-        </div>
+    <div class="card" style="background:linear-gradient(180deg,#fafbff,#fff);">
+        <p style="font-size:14px;color:#475569;line-height:1.65;">
+            Most existing Nepali date pickers on npm have conversion bugs because they algorithmically derive month lengths. Real Bikram Sambat months are astronomically determined and published yearly — they cannot be calculated. This <strong>nepali date picker</strong> uses manually verified calendar data for every year from <strong>2082 to 2100</strong>, so BS ↔ AD conversion is always correct. The library ships three bundles so you only load what you need:
+        </p>
+        <ul style="margin-top:10px;padding-left:22px;font-size:13.5px;color:#475569;line-height:1.85;">
+            <li><strong>nepali-date-picker.all.min.js</strong> — full bundle (popover + inline + range picker)</li>
+            <li><strong>nepali-date-picker.min.js</strong> — just the popover datepicker</li>
+            <li><strong>nepali-date-range-picker.min.js</strong> — inline calendar with itinerary / availability range mode (~7 KB gzipped)</li>
+        </ul>
     </div>
 
-    <div class="doc-block">
-        <h3>Via npm (ESM)</h3>
-        <div class="code-block">
-            <button class="copy-btn" onclick="copyCode(this)">copy</button>
-            <pre>import 'nepali-bs-date-picker/css';
-import { NepaliDatePicker } from 'nepali-bs-date-picker';
-
-NepaliDatePicker.attach('#dob', {
-    language: 'np',
-    onChange: (date) => console.log(date.format('YYYY-MM-DD')),
-});</pre>
-        </div>
-    </div>
-
-    <div class="doc-block">
-        <h3>attach( target, options )</h3>
-        <p>Attaches a picker to one or more inputs. Returns a <code>Picker</code> instance (or array when multiple elements match).</p>
-        <table class="api-table">
-            <thead>
-                <tr><th>Option</th><th>Type</th><th>Default</th><th>Description</th></tr>
-            </thead>
-            <tbody>
-                <tr><td><code>language</code></td><td>string</td><td><code>'en'</code></td><td>UI language. <code>'en'</code> or <code>'np'</code></td></tr>
-                <tr><td><code>format</code></td><td>string</td><td><code>'YYYY-MM-DD'</code></td><td>Output format tokens</td></tr>
-                <tr><td><code>theme</code></td><td>string</td><td><code>'light'</code></td><td><code>'light'</code> or <code>'dark'</code></td></tr>
-                <tr><td><code>mode</code></td><td>string</td><td><code>'bs'</code></td><td><code>'bs'</code> stores BS date; <code>'ad'</code> stores AD date in input</td></tr>
-                <tr><td><code>defaultDate</code></td><td>NepaliDate</td><td>today</td><td>Initial calendar view date</td></tr>
-                <tr><td><code>minDate</code></td><td>NepaliDate</td><td>—</td><td>Dates before this are disabled</td></tr>
-                <tr><td><code>maxDate</code></td><td>NepaliDate</td><td>—</td><td>Dates after this are disabled</td></tr>
-                <tr><td><code>disabledDates</code></td><td>NepaliDate[]</td><td><code>[]</code></td><td>Specific dates to disable</td></tr>
-                <tr><td><code>disabledDaysOfWeek</code></td><td>number[]</td><td><code>[]</code></td><td>0 = Sun … 6 = Sat</td></tr>
-                <tr><td><code>weekendDays</code></td><td>number[]</td><td><code>[6]</code></td><td>Days highlighted as weekend</td></tr>
-                <tr><td><code>firstDayOfWeek</code></td><td>number</td><td><code>0</code></td><td>0 = Sun, 1 = Mon</td></tr>
-                <tr><td><code>closeOnSelect</code></td><td>boolean</td><td><code>true</code></td><td>Auto-close after picking</td></tr>
-                <tr><td><code>useNepaliNumerals</code></td><td>boolean</td><td><code>false</code></td><td>Display Devanagari digits</td></tr>
-                <tr><td><code>position</code></td><td>string</td><td><code>'auto'</code></td><td><code>'auto'</code> <code>'bottom'</code> <code>'top'</code></td></tr>
-                <tr><td><code>zIndex</code></td><td>number</td><td><code>1000</code></td><td>Popover z-index</td></tr>
-                <tr><td><code>onChange</code></td><td>function</td><td>—</td><td>Called with <code>NepaliDate | null</code> on change</td></tr>
-                <tr><td><code>onOpen</code></td><td>function</td><td>—</td><td>Called when picker opens</td></tr>
-                <tr><td><code>onClose</code></td><td>function</td><td>—</td><td>Called when picker closes</td></tr>
-                <tr><td><code>onMonthChange</code></td><td>function</td><td>—</td><td>Called with <code>(year, month)</code> on navigation</td></tr>
-            </tbody>
-        </table>
-    </div>
-
-    <div class="doc-block">
-        <h3>Picker instance methods</h3>
-        <table class="api-table">
-            <thead>
-                <tr><th>Method</th><th>Description</th></tr>
-            </thead>
-            <tbody>
-                <tr><td><code>getValue()</code></td><td>Returns current <code>NepaliDate | null</code></td></tr>
-                <tr><td><code>setValue(date)</code></td><td>Sets value and updates input</td></tr>
-                <tr><td><code>clear()</code></td><td>Clears the value</td></tr>
-                <tr><td><code>open()</code></td><td>Opens the popover</td></tr>
-                <tr><td><code>close()</code></td><td>Closes the popover</td></tr>
-                <tr><td><code>toggle()</code></td><td>Toggles open/close</td></tr>
-                <tr><td><code>setOptions(partial)</code></td><td>Merges new options and re-renders</td></tr>
-                <tr><td><code>detach()</code></td><td>Removes picker and cleans up listeners</td></tr>
-            </tbody>
-        </table>
-    </div>
-
-    <div class="doc-block">
-        <h3>NepaliDate</h3>
-        <div class="code-block">
-            <button class="copy-btn" onclick="copyCode(this)">copy</button>
-            <pre>const { NepaliDate } = NepaliDatePicker;
-
-const d = new NepaliDate(2082, 1, 15);   // year, month (1-12), day
-const today = NepaliDate.today();
-const fromAD = NepaliDate.fromAD(new Date());
-
-d.getYear()    // 2082
-d.getMonth()   // 1
-d.getDate()    // 15
-d.getDay()     // 0–6 (day of week)
-d.toAD()       // JS Date
-
-d.format('MMMM DD, YYYY')           // 'Baisakh 15, 2082'
-d.format('MMMM DD, YYYY', 'np')     // 'बैशाख १५, २०८२'
-d.isBefore(other)
-d.isAfter(other)
-d.isSame(other)
-d.diff(other, 'day')    // signed number of days</pre>
-        </div>
-    </div>
-
-    <div class="doc-block">
-        <h3>Auto-init via data attributes</h3>
-        <p>No JavaScript needed. Add <code>data-nepali-datepicker</code> to any input and it initializes automatically on page load.</p>
-        <div class="code-block">
-            <button class="copy-btn" onclick="copyCode(this)">copy</button>
-            <pre>&lt;input type="text"
-       data-nepali-datepicker
-       data-language="np"
-       data-format="YYYY-MM-DD"
-       data-theme="light"&gt;</pre>
-        </div>
-    </div>
-</section>
-
-<!-- ── Examples ── -->
-<section id="examples">
-    <p class="section-label">Examples</p>
-    <h2>Live demos</h2>
-    <p>Every demo below is powered by the actual library loaded on this page.</p>
-
-    <!-- 1. Basic -->
-    <div class="example-item">
-        <h3>Basic</h3>
-        <p class="note">Attach to an input by ID. The onChange callback receives a NepaliDate object.</p>
-        <div class="demo-box">
-            <label class="field-label" for="date-basic">Select a date</label>
+    <!-- Demo 1: Basic -->
+    <div class="card">
+        <h2>Basic <span class="tag">attach by ID</span></h2>
+        <div class="field">
+            <label for="date-basic">Select a BS date</label>
             <input type="text" id="date-basic" placeholder="YYYY-MM-DD">
-            <div class="result" id="result-basic"></div>
         </div>
-        <button class="show-code-btn" onclick="toggleCode(this)">Show code</button>
-        <div class="code-block" style="display:none">
-            <button class="copy-btn" onclick="copyCode(this)">copy</button>
-            <pre>NepaliDatePicker.attach('#date-basic', {
+        <div class="result-box" id="result-basic">Click the input to open the picker.</div>
+        <div class="code-toggle">
+            <button class="show-code-btn" onclick="toggleCode(this)">Show code</button>
+            <div class="code-block" style="display:none">
+                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                <pre>NepaliDatePicker.attach('#date-basic', {
     onChange: (date) => {
-        console.log(date.format('MMMM DD, YYYY'));
+        console.log(date.format('YYYY-MM-DD'));
     },
 });</pre>
+            </div>
         </div>
     </div>
 
-    <!-- 2. Nepali language -->
-    <div class="example-item">
-        <h3>Nepali language + Devanagari numerals</h3>
-        <p class="note">Pass <code>language: 'np'</code> and <code>useNepaliNumerals: true</code> for a fully Nepali UI.</p>
-        <div class="demo-box">
-            <label class="field-label" for="date-np">मिति छान्नुहोस्</label>
+    <!-- Demo 2: Nepali language -->
+    <div class="card">
+        <h2>Nepali language + Devanagari numerals</h2>
+        <div class="field">
+            <label for="date-np">मिति छान्नुहोस्</label>
             <input type="text" id="date-np" placeholder="YYYY-MM-DD">
-            <div class="result" id="result-np"></div>
         </div>
-        <button class="show-code-btn" onclick="toggleCode(this)">Show code</button>
-        <div class="code-block" style="display:none">
-            <button class="copy-btn" onclick="copyCode(this)">copy</button>
-            <pre>NepaliDatePicker.attach('#date-np', {
+        <div class="result-box" id="result-np">Click the input to open the picker.</div>
+        <div class="code-toggle">
+            <button class="show-code-btn" onclick="toggleCode(this)">Show code</button>
+            <div class="code-block" style="display:none">
+                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                <pre>NepaliDatePicker.attach('#date-np', {
     language: 'np',
     useNepaliNumerals: true,
     onChange: (date) => {
         console.log(date.format('MMMM DD, YYYY', 'np'));
+        console.log('AD:', date.toAD().toLocaleDateString());
     },
 });</pre>
+            </div>
         </div>
     </div>
 
-    <!-- 3. Min / Max -->
-    <div class="example-item">
-        <h3>Date range constraints</h3>
-        <p class="note">Dates outside 2083-01-01 to 2083-06-30 are disabled and cannot be selected.</p>
-        <div class="demo-box">
-            <label class="field-label" for="date-range">Select date</label>
+    <!-- Demo 3: Min/max -->
+    <div class="card">
+        <h2>Min / Max date constraints</h2>
+        <p class="hint" style="margin-bottom:14px">Only 2083-01-01 through 2083-06-30 are selectable.</p>
+        <div class="field">
+            <label for="date-range">Select date</label>
             <input type="text" id="date-range" placeholder="YYYY-MM-DD">
-            <div class="result" id="result-range"></div>
         </div>
-        <button class="show-code-btn" onclick="toggleCode(this)">Show code</button>
-        <div class="code-block" style="display:none">
-            <button class="copy-btn" onclick="copyCode(this)">copy</button>
-            <pre>NepaliDatePicker.attach('#date-range', {
+        <div class="result-box" id="result-range">Dates outside the range will be disabled.</div>
+        <div class="code-toggle">
+            <button class="show-code-btn" onclick="toggleCode(this)">Show code</button>
+            <div class="code-block" style="display:none">
+                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                <pre>NepaliDatePicker.attach('#date-range', {
     minDate: new NepaliDatePicker.NepaliDate(2083, 1, 1),
     maxDate: new NepaliDatePicker.NepaliDate(2083, 6, 30),
-    onChange: (date) => console.log(date.format('YYYY-MM-DD')),
+    onChange: (date) => {
+        console.log(date.format('YYYY-MM-DD'));
+    },
 });</pre>
+            </div>
         </div>
     </div>
 
-    <!-- 4. Multiple pickers -->
-    <div class="example-item">
-        <h3>Date range — two pickers</h3>
-        <p class="note">Pick a start and end date. The result shows how many days apart they are.</p>
-        <div class="demo-box">
-            <div class="grid-2">
-                <div>
-                    <label class="field-label" for="date-a">Start date</label>
-                    <input type="text" id="date-a" placeholder="YYYY-MM-DD">
-                </div>
-                <div>
-                    <label class="field-label" for="date-b">End date</label>
-                    <input type="text" id="date-b" placeholder="YYYY-MM-DD">
-                </div>
-            </div>
-            <div class="result" id="result-ab"></div>
+    <!-- Demo 4: Config -->
+    <div class="card">
+        <h2>Saturday weekend · stay open after select</h2>
+        <div class="field">
+            <label for="date-config">Select date</label>
+            <input type="text" id="date-config" placeholder="YYYY-MM-DD">
         </div>
-        <button class="show-code-btn" onclick="toggleCode(this)">Show code</button>
-        <div class="code-block" style="display:none">
-            <button class="copy-btn" onclick="copyCode(this)">copy</button>
-            <pre>const start = NepaliDatePicker.attach('#start');
+        <div class="result-box" id="result-config">Saturdays are highlighted. Picker stays open on selection.</div>
+        <div class="code-toggle">
+            <button class="show-code-btn" onclick="toggleCode(this)">Show code</button>
+            <div class="code-block" style="display:none">
+                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                <pre>NepaliDatePicker.attach('#date-config', {
+    weekendDays: [6],       // Saturday only (0=Sun … 6=Sat)
+    closeOnSelect: false,   // keep popover open
+    firstDayOfWeek: 0,
+    onChange: (date) => {
+        console.log(date.format('YYYY-MM-DD'), date.format('dddd'));
+    },
+});</pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- Demo 5: Multiple pickers -->
+    <div class="card">
+        <h2>Multiple pickers — opening one closes the other</h2>
+        <div class="grid-2">
+            <div class="field">
+                <label for="date-a">Start date</label>
+                <input type="text" id="date-a" placeholder="YYYY-MM-DD">
+            </div>
+            <div class="field">
+                <label for="date-b">End date</label>
+                <input type="text" id="date-b" placeholder="YYYY-MM-DD">
+            </div>
+        </div>
+        <div class="result-box" id="result-ab">Select both dates to see the difference.</div>
+        <div class="code-toggle">
+            <button class="show-code-btn" onclick="toggleCode(this)">Show code</button>
+            <div class="code-block" style="display:none">
+                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                <pre>const start = NepaliDatePicker.attach('#start');
 const end   = NepaliDatePicker.attach('#end');
 
+// date.diff(other, 'day') returns signed day count
 function onAnyChange() {
     const a = start.getValue();
     const b = end.getValue();
@@ -596,71 +303,132 @@ function onAnyChange() {
 }
 start.setOptions({ onChange: onAnyChange });
 end.setOptions({ onChange: onAnyChange });</pre>
+            </div>
         </div>
     </div>
 
-    <!-- 5. Programmatic -->
-    <div class="example-item">
-        <h3>Programmatic control</h3>
-        <p class="note">Use the returned Picker instance to control the picker from code.</p>
-        <div class="demo-box">
-            <label class="field-label" for="date-prog">Date</label>
-            <input type="text" id="date-prog" placeholder="YYYY-MM-DD">
-            <div>
-                <button class="action-btn" onclick="setToday()">Set today</button>
-                <button class="action-btn ghost" onclick="clearDate()">Clear</button>
-                <button class="action-btn ghost" onclick="openPicker()">Open</button>
-            </div>
-            <div class="result" id="result-prog"></div>
+    <!-- Demo 6: Dark theme -->
+    <div class="card dark-card">
+        <h2>Dark theme <span class="tag" style="background:#1e3a5f;color:#93c5fd">theme: 'dark'</span></h2>
+        <div class="field">
+            <label for="date-dark">Select date</label>
+            <input type="text" id="date-dark" placeholder="YYYY-MM-DD">
         </div>
-        <button class="show-code-btn" onclick="toggleCode(this)">Show code</button>
-        <div class="code-block" style="display:none">
-            <button class="copy-btn" onclick="copyCode(this)">copy</button>
-            <pre>const picker = NepaliDatePicker.attach('#date-prog');
+        <div class="result-box" id="result-dark">The popover uses the dark theme.</div>
+        <div class="code-toggle">
+            <button class="show-code-btn" onclick="toggleCode(this)">Show code</button>
+            <div class="code-block" style="display:none">
+                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                <pre>NepaliDatePicker.attach('#date-dark', {
+    theme: 'dark',
+});</pre>
+            </div>
+        </div>
+    </div>
 
+    <!-- Demo 7: Auto-init -->
+    <div class="card">
+        <h2>Auto-init <span class="tag">data-nepali-datepicker</span></h2>
+        <p class="hint" style="margin-bottom:14px">No JavaScript needed — just add the attribute.</p>
+        <div class="field">
+            <label for="date-auto">Auto-initialized input</label>
+            <input type="text" id="date-auto"
+                   data-nepali-datepicker
+                   data-language="en"
+                   placeholder="Automatically initialized">
+        </div>
+        <div class="code-toggle">
+            <button class="show-code-btn" onclick="toggleCode(this)">Show code</button>
+            <div class="code-block" style="display:none">
+                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                <pre>&lt;!-- No JS required, options via data-* attributes --&gt;
+&lt;input type="text"
+       data-nepali-datepicker
+       data-language="en"
+       data-format="YYYY-MM-DD"
+       data-theme="light"&gt;</pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- Demo 8: Programmatic control -->
+    <div class="card">
+        <h2>Programmatic control</h2>
+        <div class="field">
+            <label for="date-prog">Controlled input</label>
+            <input type="text" id="date-prog" placeholder="YYYY-MM-DD">
+        </div>
+        <div style="margin-top:8px">
+            <button class="action-btn" onclick="setToday()">Set Today</button>
+            <button class="action-btn secondary" onclick="clearDate()">Clear</button>
+            <button class="action-btn secondary" onclick="openPicker()">Open</button>
+        </div>
+        <div class="result-box" id="result-prog">Use the buttons above to control the picker.</div>
+        <div class="code-toggle">
+            <button class="show-code-btn" onclick="toggleCode(this)">Show code</button>
+            <div class="code-block" style="display:none">
+                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                <pre>const picker = NepaliDatePicker.attach('#date-prog');
+
+// Set a specific date
+picker.setValue(new NepaliDatePicker.NepaliDate(2083, 4, 15));
+
+// Set to today
 picker.setValue(NepaliDatePicker.NepaliDate.today());
-picker.getValue();   // NepaliDate | null
+
+// Read the current value
+const date = picker.getValue(); // NepaliDate | null
+
+// Clear
 picker.clear();
+
+// Open / close programmatically
 picker.open();
 picker.close();</pre>
+            </div>
         </div>
     </div>
 
-    <!-- 6. AD mode -->
-    <div class="example-item">
-        <h3>AD mode</h3>
-        <p class="note">The calendar shows BS dates but writes the AD equivalent into the input — useful for backend forms that expect AD.</p>
-        <div class="demo-box">
-            <label class="field-label" for="date-ad">Pick BS → stored as AD</label>
+    <!-- Demo 9: AD mode -->
+    <div class="card">
+        <h2>AD mode — stores AD date in input</h2>
+        <div class="field">
+            <label for="date-ad">Pick a BS date → stored as AD</label>
             <input type="text" id="date-ad" placeholder="YYYY-MM-DD (AD)">
-            <div class="result" id="result-ad"></div>
         </div>
-        <button class="show-code-btn" onclick="toggleCode(this)">Show code</button>
-        <div class="code-block" style="display:none">
-            <button class="copy-btn" onclick="copyCode(this)">copy</button>
-            <pre>NepaliDatePicker.attach('#date-ad', {
-    mode: 'ad',
+        <div class="result-box" id="result-ad">The input value will be in AD format.</div>
+        <div class="code-toggle">
+            <button class="show-code-btn" onclick="toggleCode(this)">Show code</button>
+            <div class="code-block" style="display:none">
+                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                <pre>NepaliDatePicker.attach('#date-ad', {
+    mode: 'ad',   // input value written as YYYY-MM-DD AD
     onChange: (date) => {
-        // date is a NepaliDate; input.value holds the AD string
+        // date is still a NepaliDate for display
+        // but input.value contains the AD string
         console.log('BS:', date.format('YYYY-MM-DD'));
+        console.log('AD input value:', input.value);
     },
 });</pre>
+            </div>
         </div>
     </div>
 
-    <!-- 7. Disabled dates -->
-    <div class="example-item">
-        <h3>Specific disabled dates</h3>
-        <p class="note">Ashadh 10, 15, and 20 of 2083 cannot be selected.</p>
-        <div class="demo-box">
-            <label class="field-label" for="date-disabled">Select date</label>
+    <!-- Demo 10: Disabled specific dates -->
+    <div class="card">
+        <h2>Disabled specific dates <span class="tag">disabledDates</span></h2>
+        <p class="hint" style="margin-bottom:14px">Ashadh 10, 15, and 20 of 2083 cannot be selected.</p>
+        <div class="field">
+            <label for="date-disabled">Select date</label>
             <input type="text" id="date-disabled" placeholder="YYYY-MM-DD">
-            <div class="result" id="result-disabled"></div>
         </div>
-        <button class="show-code-btn" onclick="toggleCode(this)">Show code</button>
-        <div class="code-block" style="display:none">
-            <button class="copy-btn" onclick="copyCode(this)">copy</button>
-            <pre>const { NepaliDate } = NepaliDatePicker;
+        <div class="result-box" id="result-disabled">Specific dates are greyed out and unselectable.</div>
+        <div class="code-toggle">
+            <button class="show-code-btn" onclick="toggleCode(this)">Show code</button>
+            <div class="code-block" style="display:none">
+                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                <pre>const { NepaliDate } = NepaliDatePicker;
+
 NepaliDatePicker.attach('#date-disabled', {
     defaultDate: new NepaliDate(2083, 3, 1),
     disabledDates: [
@@ -669,138 +437,226 @@ NepaliDatePicker.attach('#date-disabled', {
         new NepaliDate(2083, 3, 20),
     ],
 });</pre>
+            </div>
         </div>
     </div>
 
-    <!-- 8. Dark theme -->
-    <div class="example-item">
-        <h3>Dark theme</h3>
-        <p class="note">Pass <code>theme: 'dark'</code>. Include the dark CSS file for the dark variant.</p>
-        <div class="demo-box dark-demo">
-            <label class="field-label" for="date-dark">Select date</label>
-            <input type="text" id="date-dark" placeholder="YYYY-MM-DD">
-            <div class="result" id="result-dark"></div>
+    <!-- Demo 11: Inline single-month calendar -->
+    <div class="card">
+        <h2>Inline calendar — single month <span class="tag">attachInline</span></h2>
+        <p class="hint" style="margin-bottom:14px">
+            Embedded directly in the page. Each cell shows the BS date (large) and the
+            corresponding AD date (small). Covers full available width.
+        </p>
+        <div id="cal-single"></div>
+        <div class="result-box" id="result-inline-single" style="margin-top:14px">
+            Click a date to select it.
         </div>
-        <button class="show-code-btn" onclick="toggleCode(this)">Show code</button>
-        <div class="code-block" style="display:none">
-            <button class="copy-btn" onclick="copyCode(this)">copy</button>
-            <pre>&lt;!-- add the dark CSS alongside the base CSS --&gt;
-&lt;link rel="stylesheet" href="nepali-date-picker.dark.min.css"&gt;
-
-NepaliDatePicker.attach('#date-dark', { theme: 'dark' });</pre>
-        </div>
-    </div>
-
-    <!-- 9. Auto-init -->
-    <div class="example-item">
-        <h3>Auto-init via data attribute</h3>
-        <p class="note">No JavaScript required. The input below was initialized purely by the HTML attribute.</p>
-        <div class="demo-box">
-            <label class="field-label" for="date-auto">Auto-initialized</label>
-            <input type="text" id="date-auto"
-                   data-nepali-datepicker
-                   data-language="en"
-                   placeholder="No JS needed">
-        </div>
-        <button class="show-code-btn" onclick="toggleCode(this)">Show code</button>
-        <div class="code-block" style="display:none">
-            <button class="copy-btn" onclick="copyCode(this)">copy</button>
-            <pre>&lt;input type="text"
-       data-nepali-datepicker
-       data-language="en"
-       data-format="YYYY-MM-DD"&gt;</pre>
-        </div>
-    </div>
-</section>
-
-<!-- ── Footer ── -->
-<footer>
-    <p>
-        <a href="https://github.com/Arjun-Jhukal/nepali-date-picker" target="_blank">GitHub</a> ·
-        <a href="https://www.npmjs.com/package/nepali-bs-date-picker" target="_blank">npm</a> ·
-        MIT License · Made by <a href="https://github.com/Arjun-Jhukal" target="_blank">Arjun Jhukal</a>
-    </p>
-</footer>
-
-<link rel="stylesheet" href="dist/nepali-date-picker.dark.min.css">
-<script src="dist/nepali-date-picker.iife.min.js"></script>
-<script>
-const NDP = window.NepaliDatePicker;
-
-// Basic
-NDP.attach('#date-basic', {
+        <div class="code-toggle">
+            <button class="show-code-btn" onclick="toggleCode(this)">Show code</button>
+            <div class="code-block" style="display:none">
+                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                <pre>const cal = NepaliDatePicker.attachInline('#cal-single', {
+    months: 1,
+    showAdDate: true,
+    weekendDays: [6],        // Saturday highlighted
     onChange: (date) => {
-        const el = document.getElementById('result-basic');
-        el.innerHTML = date ? `<b>${date.format('MMMM DD, YYYY')}</b> &mdash; ${date.format('YYYY-MM-DD')}` : '';
+        console.log('BS:', date.format('YYYY-MM-DD'));
+        console.log('AD:', date.toAD().toLocaleDateString());
+    },
+});</pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- Demo 12: Inline dual-month calendar (dark) -->
+    <div class="card dark-card">
+        <h2>Inline calendar — dual month <span class="tag" style="background:#1e3a5f;color:#93c5fd">months: 2</span></h2>
+        <p class="hint" style="margin-bottom:14px">
+            Two months side by side on desktop, collapses to one on mobile (≤ 600 px).
+            Both BS and AD dates are visible in every cell. Click the month/year title to jump to any month or year.
+        </p>
+        <div id="cal-dual"></div>
+        <div class="result-box" id="result-inline-dual" style="margin-top:14px; background:#0f172a; border-color:#334155; color:#94a3b8;">
+            Click a date to select it.
+        </div>
+        <div class="code-toggle">
+            <button class="show-code-btn" onclick="toggleCode(this)">Show code</button>
+            <div class="code-block" style="display:none">
+                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                <pre>const cal = NepaliDatePicker.attachInline('#cal-dual', {
+    months: 2,
+    showAdDate: true,
+    theme: 'dark',
+    language: 'en',
+    onChange: (date) => {
+        console.log('BS:', date.format('MMMM DD, YYYY'));
+        console.log('AD:', date.toAD().toLocaleDateString());
+    },
+});</pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- Demo 13: Availability / range calendar -->
+    <div class="card">
+        <h2>Availability calendar — range selection <span class="tag">selectionMode: 'range'</span></h2>
+        <p class="hint" style="margin-bottom:14px">
+            Trek / booking use-case. Click any departure date to auto-highlight a 7-day itinerary.
+            The dual-month view lets you see ranges that cross a month boundary.
+            Switch to free-range mode to pick custom start and end dates.
+            Click the month/year title to jump directly to any month.
+        </p>
+
+        <div style="display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap">
+            <button class="action-btn" onclick="setRangeLength(7)">7-day trek</button>
+            <button class="action-btn" onclick="setRangeLength(14)">14-day expedition</button>
+            <button class="action-btn secondary" onclick="setFreeRange()">Free range</button>
+            <button class="action-btn secondary" onclick="clearRange()">Clear</button>
+        </div>
+
+        <div id="cal-range"></div>
+
+        <div class="result-box" id="result-range" style="margin-top:14px">
+            Click a departure date to select the itinerary.
+        </div>
+
+        <div class="code-toggle">
+            <button class="show-code-btn" onclick="toggleCode(this)">Show code</button>
+            <div class="code-block" style="display:none">
+                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                <pre>const cal = NepaliDatePicker.attachInline('#cal-range', {
+    months: 2,
+    selectionMode: 'range',
+    rangeLength: 7,       // auto-select 7 days on click
+    showAdDate: true,
+    weekendDays: [6],
+    onRangeChange: (start, end) => {
+        if (start && end) {
+            console.log('From:', start.format('YYYY-MM-DD'));
+            console.log('To:  ', end.format('YYYY-MM-DD'));
+            console.log('Days:', start.diff(end, 'day') + 1);
+        }
     },
 });
 
-// Nepali language
+// Switch to free range (user picks custom start + end):
+cal.setOptions({ rangeLength: null });
+
+// Set range programmatically:
+const today = NepaliDatePicker.NepaliDate.today();
+cal.setRange(today, today.add(6, 'day'));</pre>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script src="dist/nepali-date-picker.all.min.js"></script>
+<script>
+const NDP = window.NepaliDatePicker;
+
+// Demo 1: Basic
+const pickerBasic = NDP.attach('#date-basic', {
+    onChange: (date) => {
+        document.getElementById('result-basic').innerHTML = date
+            ? `Selected: <span>${date.format('MMMM DD, YYYY')} (${date.format('YYYY-MM-DD')})</span>`
+            : 'No date selected.';
+    },
+});
+
+// Demo 2: Nepali language
 NDP.attach('#date-np', {
     language: 'np',
     useNepaliNumerals: true,
     onChange: (date) => {
         const el = document.getElementById('result-np');
-        if (date) el.innerHTML = `<b>${date.format('MMMM DD, YYYY', 'np')}</b> &mdash; AD: ${date.toAD().toLocaleDateString()}`;
+        if (date) {
+            el.innerHTML = `<span>${date.format('MMMM DD, YYYY', 'np')}</span> (AD: ${date.toAD().toLocaleDateString()})`;
+        }
     },
 });
 
-// Min/Max
+// Demo 3: Min/max
 NDP.attach('#date-range', {
     minDate: new NDP.NepaliDate(2083, 1, 1),
     maxDate: new NDP.NepaliDate(2083, 6, 30),
     onChange: (date) => {
         const el = document.getElementById('result-range');
-        if (date) el.innerHTML = `Selected: <b>${date.format('MMMM DD, YYYY')}</b>`;
+        if (date) el.innerHTML = `Selected: <span>${date.format('YYYY-MM-DD')}</span>`;
     },
 });
 
-// Multiple pickers
-const pickerA = NDP.attach('#date-a', { onChange: updateRangeResult });
-const pickerB = NDP.attach('#date-b', { onChange: updateRangeResult });
+// Demo 4: Config
+NDP.attach('#date-config', {
+    weekendDays: [6],
+    closeOnSelect: false,
+    firstDayOfWeek: 0,
+    onChange: (date) => {
+        const el = document.getElementById('result-config');
+        if (date) el.innerHTML = `Selected: <span>${date.format('YYYY-MM-DD')} (${date.format('dddd')})</span>`;
+    },
+});
+
+// Demo 5: Multiple pickers
+const pickerA = NDP.attach('#date-a', { onChange: () => updateRangeResult() });
+const pickerB = NDP.attach('#date-b', { onChange: () => updateRangeResult() });
+
 function updateRangeResult() {
     const a = pickerA.getValue();
     const b = pickerB.getValue();
     const el = document.getElementById('result-ab');
     if (a && b) {
         const diff = Math.abs(a.diff(b, 'day'));
-        el.innerHTML = `<b>${a.format('YYYY-MM-DD')}</b> to <b>${b.format('YYYY-MM-DD')}</b> &mdash; <b>${diff}</b> days`;
+        el.innerHTML = `Start: <span>${a.format('YYYY-MM-DD')}</span> — End: <span>${b.format('YYYY-MM-DD')}</span> · <span>${diff} days</span> apart`;
+    } else {
+        el.textContent = 'Select both dates to see the difference.';
     }
 }
 
-// Programmatic
+// Demo 6: Dark theme
+NDP.attach('#date-dark', {
+    theme: 'dark',
+    onChange: (date) => {
+        const el = document.getElementById('result-dark');
+        if (date) el.innerHTML = `Selected: <span>${date.format('YYYY-MM-DD')}</span>`;
+    },
+});
+
+// Demo 8: Programmatic
 const pickerProg = NDP.attach('#date-prog', {
     onChange: (date) => {
         const el = document.getElementById('result-prog');
         if (date) {
             const ad = date.toAD().toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
-            el.innerHTML = `BS: <b>${date.format('YYYY-MM-DD')}</b> &mdash; AD: <b>${ad}</b>`;
+            el.innerHTML = `Value: <span>${date.format('YYYY-MM-DD')}</span> · AD: <span>${ad}</span>`;
         }
     },
 });
+
 function setToday() {
     const t = NDP.NepaliDate.today();
     pickerProg.setValue(t);
-    document.getElementById('result-prog').innerHTML = `Set to today: <b>${t.format('YYYY-MM-DD')}</b>`;
+    document.getElementById('result-prog').innerHTML = `Set to today: <span>${t.format('YYYY-MM-DD')}</span>`;
 }
 function clearDate() {
     pickerProg.clear();
-    document.getElementById('result-prog').innerHTML = 'Cleared.';
+    document.getElementById('result-prog').textContent = 'Cleared.';
 }
 function openPicker() { pickerProg.open(); }
 
-// AD mode
+// Demo 9: AD mode
 NDP.attach('#date-ad', {
     mode: 'ad',
     onChange: (date) => {
         const el = document.getElementById('result-ad');
         if (date) {
-            el.innerHTML = `BS: <b>${date.format('YYYY-MM-DD')}</b> &rarr; AD stored: <b>${document.getElementById('date-ad').value}</b>`;
+            el.innerHTML = `BS: <span>${date.format('YYYY-MM-DD')}</span> → AD stored: <span>${document.getElementById('date-ad').value}</span>`;
         }
     },
 });
 
-// Disabled dates
+// Demo 10: Disabled specific dates
 NDP.attach('#date-disabled', {
     defaultDate: new NDP.NepaliDate(2083, 3, 1),
     disabledDates: [
@@ -810,39 +666,92 @@ NDP.attach('#date-disabled', {
     ],
     onChange: (date) => {
         const el = document.getElementById('result-disabled');
-        if (date) el.innerHTML = `Selected: <b>${date.format('MMMM DD, YYYY')}</b>`;
+        if (date) el.innerHTML = `Selected: <span>${date.format('MMMM DD, YYYY')}</span>`;
     },
 });
 
-// Dark theme
-NDP.attach('#date-dark', {
+// Demo 11: Inline single-month
+const calSingle = NDP.attachInline('#cal-single', {
+    months: 1,
+    showAdDate: true,
+    weekendDays: [6],
+    onChange: (date) => {
+        const el = document.getElementById('result-inline-single');
+        if (date) {
+            const ad = date.toAD().toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+            el.innerHTML = `Selected BS: <span>${date.format('MMMM DD, YYYY')}</span> &nbsp;·&nbsp; AD: <span>${ad}</span>`;
+        }
+    },
+});
+
+// Demo 12: Inline dual-month (dark)
+const calDual = NDP.attachInline('#cal-dual', {
+    months: 2,
+    showAdDate: true,
     theme: 'dark',
     onChange: (date) => {
-        const el = document.getElementById('result-dark');
-        if (date) el.innerHTML = `Selected: <b>${date.format('YYYY-MM-DD')}</b>`;
+        const el = document.getElementById('result-inline-dual');
+        if (date) {
+            const ad = date.toAD().toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+            el.innerHTML = `Selected BS: <span style="color:#f1f5f9;font-weight:600">${date.format('MMMM DD, YYYY')}</span> &nbsp;·&nbsp; AD: <span style="color:#f1f5f9;font-weight:600">${ad}</span>`;
+        }
     },
 });
 
-// Helpers
+// Demo 13: Availability / range calendar
+const calRange = NDP.attachInline('#cal-range', {
+    months: 2,
+    selectionMode: 'range',
+    rangeLength: 7,
+    showAdDate: true,
+    weekendDays: [6],
+    onRangeChange: (start, end) => {
+        const el = document.getElementById('result-range');
+        if (start && end) {
+            const days = Math.abs(start.diff(end, 'day')) + 1;
+            const adStart = start.toAD().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+            const adEnd   = end.toAD().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+            el.innerHTML = `Departure: <span>${start.format('MMMM DD, YYYY')}</span> (${adStart})<br>`
+                         + `Return: <span>${end.format('MMMM DD, YYYY')}</span> (${adEnd})<br>`
+                         + `Duration: <span>${days} days</span>`;
+        } else if (start) {
+            el.innerHTML = `Start: <span>${start.format('MMMM DD, YYYY')}</span> — pick an end date.`;
+        } else {
+            el.textContent = 'Click a departure date to select the itinerary.';
+        }
+    },
+});
+
+function setRangeLength(n) {
+    calRange.setOptions({ selectionMode: 'range', rangeLength: n });
+    calRange.setRange(null, null);
+    document.getElementById('result-range').textContent = `Click a departure date (${n}-day itinerary).`;
+}
+function setFreeRange() {
+    calRange.setOptions({ selectionMode: 'range', rangeLength: null });
+    calRange.setRange(null, null);
+    document.getElementById('result-range').textContent = 'Click a start date, then an end date.';
+}
+function clearRange() {
+    calRange.setRange(null, null);
+    document.getElementById('result-range').textContent = 'Click a departure date to select the itinerary.';
+}
+
+// Show/hide code toggle
 function toggleCode(btn) {
     const block = btn.nextElementSibling;
-    const show = block.style.display === 'none';
-    block.style.display = show ? 'block' : 'none';
-    btn.textContent = show ? 'Hide code' : 'Show code';
+    const isHidden = block.style.display === 'none';
+    block.style.display = isHidden ? 'block' : 'none';
+    btn.textContent = isHidden ? 'Hide code' : 'Show code';
 }
+
+// Copy code to clipboard
 function copyCode(btn) {
-    const pre = btn.nextElementSibling;
-    navigator.clipboard.writeText(pre.textContent.trim()).then(() => {
-        btn.textContent = 'copied!';
+    const code = btn.nextElementSibling.textContent;
+    navigator.clipboard.writeText(code).then(() => {
+        btn.textContent = 'Copied!';
         btn.classList.add('copied');
-        setTimeout(() => { btn.textContent = 'copy'; btn.classList.remove('copied'); }, 2000);
-    });
-}
-function copyInstall(btn) {
-    navigator.clipboard.writeText('npm install nepali-bs-date-picker').then(() => {
-        btn.textContent = 'copied!';
-        btn.classList.add('copied');
-        setTimeout(() => { btn.textContent = 'copy'; btn.classList.remove('copied'); }, 2000);
+        setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
     });
 }
 </script>

@@ -1,34 +1,32 @@
-import { NepaliDate } from '../core/nepali-date';
-import { bsToAd, adToBs } from '../core/conversion';
-import { resolveOptions } from './options';
-import type { PickerOptions } from './options';
-import { InstanceRegistry } from './instance-registry';
-import { Picker } from './picker-class';
-import { InlineCalendar } from './inline';
-import type { InlineCalendarOptions } from './inline';
-
-export { Picker };
+/**
+ * IIFE bundle — popover picker only.
+ *
+ * Exposes window.NepaliDatePicker with .attach(), conversion helpers and
+ * the NepaliDate class, but does NOT include the inline calendar / range
+ * picker. Use this when you only need the popover datepicker.
+ *
+ * Bundle file: dist/nepali-date-picker.min.js
+ */
+import { Picker } from './picker/picker-class';
+import { resolveOptions, parseDataAttributes } from './picker/options';
+import type { PickerOptions } from './picker/options';
+import { InstanceRegistry } from './picker/instance-registry';
+import { NepaliDate } from './core/nepali-date';
+import { bsToAd, adToBs, getDaysInMonth, isValidBSDate } from './core/conversion';
 
 let globalDefaults: Partial<PickerOptions> = {};
 
 function getOrCreate(el: HTMLElement, opts: PickerOptions): Picker {
-    if (InstanceRegistry.has(el)) {
-        return InstanceRegistry.get(el) as Picker;
-    }
+    if (InstanceRegistry.has(el)) return InstanceRegistry.get(el) as Picker;
     const picker = new Picker(el, opts);
     InstanceRegistry.set(el, picker);
     return picker;
 }
 
-export const NepaliDatePicker = {
+const NepaliDatePicker = {
     version: '2.2.0' as const,
+    bundle: 'picker' as const,
 
-    /**
-     * Attaches a date picker to one or more inputs.
-     *
-     * @example
-     * NepaliDatePicker.attach('#dob', { language: 'np' });
-     */
     attach(
         target: string | HTMLElement | NodeList | HTMLElement[],
         options: Partial<PickerOptions> = {},
@@ -75,27 +73,25 @@ export const NepaliDatePicker = {
         globalDefaults = { ...globalDefaults, ...options };
     },
 
-    /**
-     * Mounts an inline (embedded) calendar into a container element.
-     *
-     * @example
-     * NepaliDatePicker.attachInline('#cal', { months: 2, showAdDate: true });
-     */
-    attachInline(
-        container: string | HTMLElement,
-        options: Partial<InlineCalendarOptions> = {},
-    ): InlineCalendar | null {
-        let el: HTMLElement | null = null;
-        if (typeof container === 'string') {
-            el = document.querySelector<HTMLElement>(container);
-        } else if (container instanceof HTMLElement) {
-            el = container;
-        }
-        return el ? new InlineCalendar(el, options) : null;
-    },
-
-    InlineCalendar,
     bsToAd,
     adToBs,
+    getDaysInMonth,
+    isValidBSDate,
     NepaliDate,
 };
+
+(window as unknown as { NepaliDatePicker: typeof NepaliDatePicker }).NepaliDatePicker =
+    NepaliDatePicker;
+
+function autoInit(): void {
+    if (document.querySelectorAll('script[data-nepali-no-autoinit]').length > 0) return;
+    document.querySelectorAll<HTMLElement>('[data-nepali-datepicker]').forEach((el) => {
+        NepaliDatePicker.attach(el, parseDataAttributes(el));
+    });
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', autoInit);
+} else {
+    autoInit();
+}

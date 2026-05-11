@@ -222,6 +222,282 @@
     font-weight: 700;
 }
 
+/* ============================================================
+   Inline Calendar
+   ============================================================ */
+
+.ndp-inline {
+    width: 100%;
+    background: var(--ndp-bg);
+    border: 1px solid var(--ndp-border);
+    border-radius: var(--ndp-radius);
+    font-family: var(--ndp-font-family);
+    font-size: var(--ndp-font-size);
+    color: var(--ndp-text);
+    user-select: none;
+    -webkit-user-select: none;
+    overflow: hidden;
+}
+
+/* Navigation bar */
+.ndp-inline-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--ndp-header-bg);
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--ndp-border);
+    gap: 8px;
+}
+
+.ndp-inline-nav-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--ndp-text);
+    font-size: 22px;
+    line-height: 1;
+    padding: 4px 12px;
+    border-radius: var(--ndp-cell-radius);
+    transition: background 0.15s;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+}
+
+.ndp-inline-nav-btn:hover {
+    background: var(--ndp-hover-bg);
+}
+
+.ndp-inline-nav-titles {
+    display: flex;
+    flex: 1;
+    justify-content: space-around;
+    gap: 8px;
+}
+
+.ndp-inline-nav-title {
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--ndp-text);
+    text-align: center;
+    flex: 1;
+    border-radius: var(--ndp-cell-radius);
+    padding: 2px 6px;
+}
+
+.ndp-inline-nav-title--clickable {
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+}
+
+.ndp-inline-nav-title--clickable:hover {
+    background: var(--ndp-hover-bg);
+    color: var(--ndp-primary);
+}
+
+/* Body: holds one or two month panels side by side */
+.ndp-inline-body {
+    display: grid;
+    grid-template-columns: 1fr;
+}
+
+.ndp-inline--dual .ndp-inline-body {
+    grid-template-columns: 1fr 1fr;
+}
+
+/* Individual month panel */
+.ndp-inline-month {
+    border-right: 1px solid var(--ndp-border);
+}
+
+.ndp-inline-month:last-child {
+    border-right: none;
+}
+
+/* Weekday header row */
+.ndp-inline-weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    border-bottom: 1px solid var(--ndp-border);
+    background: var(--ndp-header-bg);
+}
+
+.ndp-inline-weekday {
+    text-align: center;
+    padding: 8px 2px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--ndp-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    border-right: 1px solid var(--ndp-border);
+}
+
+.ndp-inline-weekday:last-child {
+    border-right: none;
+}
+
+/* Day rows */
+.ndp-inline-row {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    border-bottom: 1px solid var(--ndp-border);
+}
+
+.ndp-inline-row:last-child {
+    border-bottom: none;
+}
+
+/* Day cells */
+.ndp-inline-cell {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 2px;
+    min-height: 58px;
+    cursor: pointer;
+    border-right: 1px solid var(--ndp-border);
+    transition: background 0.1s;
+    gap: 3px;
+}
+
+.ndp-inline-cell:last-child {
+    border-right: none;
+}
+
+.ndp-inline-cell--empty {
+    cursor: default;
+    background: rgba(0, 0, 0, 0.018);
+    pointer-events: none;
+}
+
+.ndp-inline-cell:not(.ndp-inline-cell--empty):not(.ndp-inline-cell--disabled):hover {
+    background: var(--ndp-hover-bg);
+}
+
+/* BS day number (large, primary label) */
+.ndp-inline-bs {
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.2;
+    color: var(--ndp-text);
+}
+
+/* AD date sub-label (small, secondary) */
+.ndp-inline-ad {
+    font-size: 10px;
+    color: var(--ndp-text-muted);
+    line-height: 1.2;
+}
+
+/* Today */
+.ndp-inline-cell--today {
+    background: var(--ndp-today-bg);
+}
+
+.ndp-inline-cell--today .ndp-inline-bs {
+    color: var(--ndp-today-text);
+    font-weight: 700;
+}
+
+/* Selected */
+.ndp-inline-cell--selected {
+    background: var(--ndp-selected-bg) !important;
+}
+
+.ndp-inline-cell--selected .ndp-inline-bs,
+.ndp-inline-cell--selected .ndp-inline-ad {
+    color: var(--ndp-selected-text) !important;
+}
+
+/* Weekend */
+.ndp-inline-cell--weekend .ndp-inline-bs {
+    color: var(--ndp-weekend-text);
+}
+
+.ndp-inline-cell--selected.ndp-inline-cell--weekend .ndp-inline-bs {
+    color: var(--ndp-selected-text) !important;
+}
+
+/* Disabled */
+.ndp-inline-cell--disabled {
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.ndp-inline-cell--disabled .ndp-inline-bs,
+.ndp-inline-cell--disabled .ndp-inline-ad {
+    color: var(--ndp-disabled-text);
+}
+
+/* Range selection */
+.ndp-inline-cell--in-range {
+    background: var(--ndp-range-bg);
+    border-radius: 0;
+}
+
+.ndp-inline-cell--in-range .ndp-inline-bs {
+    color: var(--ndp-range-text);
+    font-weight: 600;
+}
+
+.ndp-inline-cell--in-range .ndp-inline-ad {
+    color: var(--ndp-range-text);
+    opacity: 0.75;
+}
+
+.ndp-inline-cell--range-start {
+    background: var(--ndp-selected-bg) !important;
+    border-radius: var(--ndp-cell-radius) 0 0 var(--ndp-cell-radius);
+}
+
+.ndp-inline-cell--range-end {
+    background: var(--ndp-selected-bg) !important;
+    border-radius: 0 var(--ndp-cell-radius) var(--ndp-cell-radius) 0;
+}
+
+/* When start and end are the same cell */
+.ndp-inline-cell--range-start.ndp-inline-cell--range-end {
+    border-radius: var(--ndp-cell-radius);
+}
+
+.ndp-inline-cell--range-start .ndp-inline-bs,
+.ndp-inline-cell--range-start .ndp-inline-ad,
+.ndp-inline-cell--range-end .ndp-inline-bs,
+.ndp-inline-cell--range-end .ndp-inline-ad {
+    color: var(--ndp-selected-text) !important;
+}
+
+/* Month/year picker overlay (replaces calendar body in picker mode) */
+.ndp-inline-picker-overlay {
+    padding: 8px 4px;
+}
+
+/* Mobile: collapse dual-month to single */
+@media (max-width: 600px) {
+    .ndp-inline--dual .ndp-inline-body {
+        grid-template-columns: 1fr;
+    }
+    .ndp-inline--dual .ndp-inline-month:not(:first-child) {
+        display: none;
+    }
+    .ndp-inline--dual .ndp-inline-nav-title:not(:first-child) {
+        display: none;
+    }
+    .ndp-inline-cell {
+        min-height: 46px;
+        padding: 6px 1px;
+    }
+    .ndp-inline-bs {
+        font-size: 13px;
+    }
+    .ndp-inline-ad {
+        font-size: 9px;
+    }
+}
+
 /* Year picker grid */
 .ndp-year-grid {
     display: grid;

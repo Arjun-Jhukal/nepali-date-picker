@@ -1,179 +1,150 @@
-# Nepali Date Picker
+# Nepali Date Picker &amp; Range Picker
 
-A lightweight, zero-dependency Bikram Sambat (BS) date picker for the web. Supports Nepali (BS) and English display, dark mode, keyboard navigation, and full ARIA accessibility.
+A vanilla JavaScript **Nepali (Bikram Sambat) date picker** and **Nepali date range picker** for any website. Zero runtime dependencies. Drops into plain HTML, WordPress, React, Vue, or any framework via a single `<script>` tag.
 
-**BS year range: 2082 – 2090**
+- **BS ↔ AD** conversion you can trust — uses manually verified calendar data (every existing JS lib derives month lengths algorithmically, which is incorrect because Bikram Sambat months are astronomically determined and published yearly).
+- **2082 – 2100** calendar data ship in the bundle.
+- **Popover** datepicker, **inline** calendar, and **range / availability / itinerary** mode.
+- **Light + Dark** themes, full **keyboard** navigation, **ARIA** roles, English + Nepali numerals.
+- Three bundles — load only what you use.
+
+```
+nepali-date-picker.all.min.js          10.82 KB gz   popover + inline + range
+nepali-date-picker.min.js               8.25 KB gz   popover only
+nepali-date-range-picker.min.js         6.79 KB gz   inline + range only
+```
 
 ---
 
-## Quick start (CDN)
+## Install
+
+### CDN / script tag
 
 ```html
-<!-- CSS -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Arjun-Jhukal/nepali-date-picker@v1.0.0/dist/nepali-date-picker.min.css">
-
-<!-- JS -->
-<script src="https://cdn.jsdelivr.net/gh/Arjun-Jhukal/nepali-date-picker@v1.0.0/dist/nepali-date-picker.iife.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nepali-bs-date-picker/dist/nepali-date-picker.min.css">
+<script src="https://cdn.jsdelivr.net/npm/nepali-bs-date-picker/dist/nepali-date-picker.all.min.js"></script>
 ```
 
-```html
-<input id="date" type="text" placeholder="YYYY-MM-DD">
+Pick the bundle that matches your use case:
 
+| File | When to use |
+|---|---|
+| `nepali-date-picker.all.min.js` | You need both the popover and the inline / range picker. |
+| `nepali-date-picker.min.js` | You only need the popover datepicker on `<input>` fields. |
+| `nepali-date-range-picker.min.js` | You only need the inline calendar (with optional range / itinerary mode). |
+
+### npm
+
+```bash
+npm install nepali-bs-date-picker
+```
+
+```js
+import { NepaliDatePicker, NepaliDate, InlineCalendar } from 'nepali-bs-date-picker';
+import 'nepali-bs-date-picker/css';
+// optional: import 'nepali-bs-date-picker/dark';
+```
+
+---
+
+## Quick start
+
+### Popover datepicker
+
+```html
+<input type="text" id="dob" placeholder="YYYY-MM-DD">
 <script>
-  NepaliDatePicker.attach('#date');
+  NepaliDatePicker.attach('#dob', {
+    language: 'np',
+    onChange: (date) => {
+      console.log(date.format('YYYY-MM-DD'));   // BS string
+      console.log(date.toAD().toISOString());   // native AD Date
+    },
+  });
+</script>
+```
+
+### Inline calendar — single or dual month
+
+```html
+<div id="cal"></div>
+<script>
+  NepaliDatePicker.attachInline('#cal', {
+    months: 2,
+    showAdDate: true,
+    onChange: (date) => console.log(date?.format('YYYY-MM-DD')),
+  });
+</script>
+```
+
+### Range / availability calendar (e.g. 7-day trek itinerary)
+
+```html
+<div id="cal-range"></div>
+<script>
+  const cal = NepaliDatePicker.attachInline('#cal-range', {
+    months: 2,
+    selectionMode: 'range',
+    rangeLength: 7,                 // auto-select 7 consecutive days
+    onRangeChange: (start, end) => {
+      // start and end are NepaliDate instances
+      console.log(start.format('YYYY-MM-DD'), '→', end.format('YYYY-MM-DD'));
+      // For your API:
+      const payload = {
+        bs_start: start.format('YYYY-MM-DD'),
+        bs_end:   end.format('YYYY-MM-DD'),
+        ad_start: start.toAD().toISOString().split('T')[0],
+        ad_end:   end.toAD().toISOString().split('T')[0],
+        nights:   Math.abs(start.diff(end, 'day')),
+      };
+    },
+  });
+
+  // Free range (click start, then click end):
+  cal.setOptions({ rangeLength: null });
+
+  // Set range programmatically:
+  const today = NepaliDate.today();
+  cal.setRange(today, today.add(6, 'day'));
 </script>
 ```
 
 ---
 
-## Install via npm
+## API surface
 
-```bash
-npm install @nepali-date/picker
-```
+### `NepaliDatePicker`
 
-```js
-import { NepaliDatePicker } from '@nepali-date/picker';
+| Method | Bundles | Description |
+|---|---|---|
+| `attach(target, options?)` | `all`, `picker` | Attach popover picker to one or more inputs. |
+| `attachInline(container, options?)` | `all`, `range` | Mount inline calendar inside an element. |
+| `detach(target)` | `all`, `picker` | Detach pickers and clean up listeners. |
+| `getInstance(el)` | `all`, `picker` | Return the `Picker` instance for an element. |
+| `setDefaults(options)` | `all`, `picker` | Set global defaults for future `attach()` calls. |
+| `NepaliDate` | all | The `NepaliDate` class. |
+| `bsToAd`, `adToBs` | all | Primitive conversion functions. |
 
-NepaliDatePicker.attach('#date');
-```
-
----
-
-## Options
-
-| Option | Type | Default | Description |
-|--------|------|---------|-------------|
-| `language` | `'en' \| 'np'` | `'en'` | Display language |
-| `format` | `string` | `'YYYY-MM-DD'` | Date format string |
-| `theme` | `'light' \| 'dark' \| 'auto'` | `'light'` | Color theme |
-| `minDate` | `NepaliDate` | — | Earliest selectable date |
-| `maxDate` | `NepaliDate` | — | Latest selectable date |
-| `disabledDates` | `NepaliDate[]` | `[]` | Specific dates to disable |
-| `disabledDaysOfWeek` | `number[]` | `[]` | 0=Sun … 6=Sat |
-| `weekendDays` | `number[]` | `[6]` | Days styled as weekends |
-| `firstDayOfWeek` | `0–6` | `0` | First column of the grid |
-| `closeOnSelect` | `boolean` | `true` | Close picker after selection |
-| `position` | `'bottom-left' \| 'bottom-right' \| 'top-left' \| 'top-right'` | `'bottom-left'` | Popover placement |
-| `zIndex` | `number` | `9999` | CSS z-index of popover |
-| `useNepaliNumerals` | `boolean` | `false` | Show Devanagari digits |
-
----
-
-## Events / callbacks
+### `NepaliDate` instance
 
 ```js
-NepaliDatePicker.attach('#date', {
-  onChange(date) {
-    console.log(date.format('YYYY-MM-DD')); // NepaliDate or null
-  },
-  onOpen() {},
-  onClose() {},
-  onMonthChange(year, month) {},
-});
+date.getYear() / getMonth() / getDate() / getDay()
+date.format('YYYY-MM-DD' | 'MMMM DD, YYYY' | …, language?)
+date.toAD()              // → native JS Date
+date.add(n, 'day')       // → new NepaliDate
+date.diff(other, 'day')  // → number
+date.isBefore(other) / isAfter(other) / isSame(other)
+NepaliDate.today() / NepaliDate.parse(str, format)
 ```
 
 ---
 
-## Auto-init via data attributes
+## SEO
 
-```html
-<input
-  type="text"
-  data-ndp
-  data-ndp-language="np"
-  data-ndp-theme="dark"
-  data-ndp-format="YYYY/MM/DD"
->
-```
-
----
-
-## Programmatic API
-
-```js
-const picker = NepaliDatePicker.attach('#date');
-
-picker.open();
-picker.close();
-picker.toggle();
-
-picker.getValue();          // NepaliDate | null
-picker.setValue(date);      // NepaliDate | null
-picker.clear();
-
-picker.setOptions({ language: 'np' });
-picker.destroy();
-
-// Get existing instance
-NepaliDatePicker.getInstance(document.getElementById('date'));
-
-// Set global defaults
-NepaliDatePicker.setDefaults({ theme: 'dark', language: 'np' });
-```
-
----
-
-## NepaliDate API
-
-```js
-const { NepaliDate, bsToAd, adToBs } = NepaliDatePicker;
-
-const d = new NepaliDate(2082, 1, 15);
-d.getYear();    // 2082
-d.getMonth();   // 1
-d.getDate();    // 15
-d.getDay();     // 0–6 (day of week)
-
-d.format('YYYY-MM-DD');          // '2082-01-15'
-d.format('MMMM D, YYYY', 'np'); // Nepali month name
-
-d.toAD();               // JS Date
-NepaliDate.today();     // today in BS
-NepaliDate.fromAD(new Date());
-
-d.isBefore(other);
-d.isAfter(other);
-d.isSame(other);
-
-bsToAd(2082, 1, 15);   // { year, month, day } in AD
-adToBs(2025, 4, 29);   // { year, month, day } in BS
-```
-
----
-
-## Theming
-
-The picker uses CSS custom properties. Override any variable to match your design:
-
-```css
-:root {
-  --ndp-primary: #your-color;
-  --ndp-bg: #ffffff;
-  --ndp-text: #1e293b;
-  /* see dist/nepali-date-picker.min.css for full list */
-}
-```
-
-Dark mode:
-
-```html
-<link rel="stylesheet" href="nepali-date-picker.min.css">
-<link rel="stylesheet" href="nepali-date-picker.dark.min.css">
-```
-
----
-
-## Building from source
-
-```bash
-npm install
-npm run build   # outputs to dist/
-npm test        # runs unit + integration tests
-```
+This is a **Nepali date picker** library, a **Nepali date range picker** library, and a **Bikram Sambat date picker** for the 2026 / BS 2082+ era. It handles BS to AD conversion, AD to BS conversion, and ships calendar data through BS 2100. Works in WordPress, vanilla HTML, React, Vue, and any modern framework.
 
 ---
 
 ## License
 
-MIT © Arjun Jhukal
+MIT — © Arjun Jhukal

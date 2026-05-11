@@ -15,6 +15,8 @@
     --ndp-selected-text: #111827;
     --ndp-weekend-text: #f87171;
     --ndp-disabled-text: #4b5563;
+    --ndp-range-bg: #1e3a5f;
+    --ndp-range-text: #93c5fd;
     --ndp-header-bg: #1f2937;
     --ndp-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
     --ndp-radius: 10px;
